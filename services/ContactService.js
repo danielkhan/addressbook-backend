@@ -1,23 +1,33 @@
-const uniqid = require('uniqid');
+const ContactModel = require('../models/ContactModel');
 
 class ContactService {
-  constructor() {
-    this.contacts = [];
+  static async add(contact, userId) {
+    contact.user_id = userId;
+    const contactModel = new ContactModel(contact);
+    return contactModel.save();
   }
 
-  add(contact) {
-    contact.id = uniqid();
-    this.contacts.push(contact);
-    return contact;
+  static async update(contact, contactId, userId) {
+    return ContactModel.findOneAndUpdate({
+      _id: contactId,
+      user_id: userId,
+    }, contact, { new: true });
   }
 
-  list() {
-    return this.contacts;
+  static async list(userId) {
+    return ContactModel.find({ user_id: userId }).sort({ lastname: 1 });
   }
 
-  deleteAll() {
-    this.contacts = [];
-    return this.contacts;
+  static async delete(contactId, userId) {
+    return ContactModel.remove({ _id: contactId, user_id: userId });
+  }
+
+  static async findById(contactId, userId) {
+    return ContactModel.findOne({ _id: contactId, user_id: userId });
+  }
+
+  static async deleteAll(userId) {
+    return ContactModel.remove({ user_id: userId });
   }
 }
 
