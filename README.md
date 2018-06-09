@@ -1,4 +1,4 @@
-This exists purely for demonstation- and training-purposes.
+This exists purely for demonstration- and training-purposes.
 
 # Installation
 
